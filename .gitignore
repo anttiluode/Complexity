@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+# bulk traces; summaries, plots and selected small checkpoints are committed
+results/**/trace_*.npz
+results/**/bulk/
