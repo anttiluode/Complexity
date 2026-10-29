@@ -31,9 +31,12 @@ reverse and exterior transplants erase it, even when the surrounding gas differs
 3. float32 cannot resolve the response differences at strength 0.02 (row 9); the conclusions use float64.
 4. The probe's response never leaves the droplet within the horizon, so "local" partly restates "insulated".
 
+## Done since: many droplets (RESULTS row 15)
+11/11 different droplets keep the effect (E = 0.04–0.07). Reproduce: `python -m complexity.many_droplets` (~80 s).
+
 ## ONE most informative next experiment
-**Many droplets, not one.** Vary what makes droplets genuinely different: initial radius (N//6 ± 1, ± 2 by editing
-the seed bubble width, labelled), tension 3/5/8, and grid N = 32/40. Freeze strength 0.2 and the same detector.
-Measure E at wait 300 and the retained breathing-amplitude difference per droplet. That turns row 12 from "exact
-for one droplet" into a distribution, and tests whether "breathing amplitude predicts the changed response"
-(the compact-state claim, untested) holds across droplets. Budget about 15 simulation minutes.
+**Compact predictive state.** The retained breathing amplitude is near-universal (ΔA ≈ ±0.045), yet E grows with
+tension. Test whether a two-number state (ΔA, Δphase), plus the droplet's tension, predicts the probe response of a
+written droplet *held out* from the fit: fit on half of the 11 droplets × 2 signs × 3 waits, predict the rest, and
+compare against a shape-only predictor (which, since shape recovers, should predict no difference). Spec Stage-C
+follow-up item; about 10 simulation minutes.

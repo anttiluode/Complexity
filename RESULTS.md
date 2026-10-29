@@ -11,9 +11,9 @@ the spec are marked **[deviation]**.
 A seeded cold droplet in the source rule recovers its shape after a kick but **keeps a changed internal
 breathing amplitude**. That change alters its response to a later probe and is carried **by the droplet
 interior alone**: the transplant tests are clean. It passes the spec's Stage B gate at write strength 0.2,
-but **not at the spec's 0.02**, where the same effect is 10× smaller (E = 0.005). The three confirmation
-seeds turn out to be the same deterministic droplet, so the result is exact for this one droplet and untested
-across different ones.
+but **not at the spec's 0.02**, where the same effect is 10× smaller (E = 0.005). The three confirmation seeds
+turn out to be the same deterministic droplet, but row 15 then repeats the test on 11 genuinely different
+droplets (sizes, tensions, grids), and the effect holds in all of them.
 
 Machine: cloud CPU, 2 cores, Python 3.13.18, NumPy 2.5.3, SciPy 1.18.1. Total simulation time
 ≈ 8 minutes (atlas 38.8 s; diagnostics ≈ 1.5 min; part 2 ≈ 6 min).
@@ -35,6 +35,7 @@ Machine: cloud CPU, 2 cores, Python 3.13.18, NumPy 2.5.3, SciPy 1.18.1. Total si
 | 12 | Stage B gate at strength 0.2 | confirmation seeds 201–203, float64 | all spec controls + remote | **gate passes**: +write at wait 300 (E = 0.057) and 1000 (0.173); −write at 1000 (0.074–0.075); recovery ≥ 0.94 raw IoU; F = 0; linearity difference 0.001; remote ≤ 7e-9 | **seeds give identical numbers** (and equal the seed-101 scan): one deterministic droplet, not independent replications | **pass (one droplet)** |
 | 13 | The retained change lives in the droplet | Stage C, every passing (sign, wait), 100-step post-transfer wait | identity shams (E = 0 exactly), same-parent transfer (0) | **interior written→sham reproduces the full effect** (0.108 at 300; 0.061–0.086 at 1000). **Interior sham→written and exterior-only give 0.000**, even when the exterior differs completely (mismatch 1.9–2.0). Channel: at wait 300 the effect sits in φ (written φ + sham v: 0.109; sham φ + written v: 0.008); at 1000 it is split (+: 0.032 / 0.065; −: 0.058 / 0.026), i.e. it rotates between position and velocity | the probe response stays inside the droplet over the horizon (D_outer = 0), so locality is partly built into the insulation | **localized causal carrier (this droplet, this probe)** |
 | 14 | What the carrier is | `complexity/phase_probe.py`, mean φ over the core (r ≤ 4), seed 201, strength ±0.2, 1500 steps | untouched twin | breathing mode at ω = 0.1424 rad/step (≈ √V″(min) = √2 per time unit), 34 cycles. **Amplitude is retained**: + write 0.182 vs twin 0.133 (step 88), 0.106 vs 0.053 (step 1408); − write 0.086 → 0.035. **Phase drifts** (+: +0.07 → −0.26 rad; −: −0.16 → −0.76) because amplitude sets frequency in the anharmonic well | one seed; window lock-in | the change is **amplitude-like and persistent**; phase is its consequence, not the store |
+| 15 | The effect holds across different droplets | `complexity/many_droplets.py`: bubble width r = 4–7 (**[deviation]** labelled initializer variant), tension 3/5/8, N = 32/40, float64, strength 0.2, wait 300 | twin, remote write just outside each droplet | **11/11 droplets pass the screen and recover shape.** E+ = 0.044–0.074, E− = 0.041–0.048; remote ≤ 1e-5. The droplet from row 12 reproduces exactly (0.057 / 0.041). E+ rises with tension (≈ 0.046 → 0.057 → 0.069 for tension 3/5/8). Retained breathing amplitude ΔA ≈ ±0.045 in every droplet | the frequency estimate is FFT-bin limited (all 0.1466); one wait | **robust across droplets.** ΔA is near-universal, so it does not explain the tension dependence of E (Spearman 0.71, n = 22): **compact predictive state not established** |
 
 ## What the "crystals" are, in this rule
 
@@ -72,8 +73,8 @@ candidate.
 
 ## Not claimed
 
-Robustness across droplets (sizes, positions, tensions, grids): the confirmation seeds collapse onto one
-deterministic droplet. Spontaneous structure (the droplet is seeded). Indefinite persistence (it melts in
+Positions other than the box centre, and droplets that were not seeded (row 15 covers sizes, tensions and
+grids). Spontaneous structure (the droplet is seeded). Indefinite persistence (it melts in
 ~3000 steps as the rule heats the lattice). Anything about the multichannel crystal_kingdom model, the rain
 meshes, or best.py's nested sub-simulations (excluded by design). Any claim at the spec's write strength
 0.02 beyond "a linear local effect of E ≈ 0.5%, below the screen".

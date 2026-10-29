@@ -29,7 +29,7 @@ A low-dimensional predictive object model and interactions between such objects 
 
 ## Current status (29 Oct 2026)
 
-**Yes, for one droplet.** A seeded cold droplet in best.py's rule recovers its shape after a kick but keeps a
+**Yes, for seeded droplets (11/11 tested).** A seeded cold droplet in best.py's rule recovers its shape after a kick but keeps a
 changed internal breathing amplitude. That makes a later probe respond differently, and only the droplet's
 interior carries the change. Full ledger: [RESULTS.md](RESULTS.md). Next step: [HANDOFF.md](HANDOFF.md).
 
@@ -43,8 +43,10 @@ interior carries the change. Full ledger: [RESULTS.md](RESULTS.md). Next step: [
   the same kick in the gas changes the droplet's response by ≤ 1e-8. Transplanting the droplet interior carries the
   whole effect; transplanting everything else carries none. The retained variable is the **breathing amplitude**
   (ω ≈ √2), whose anharmonic frequency shift makes the phase drift.
-* Caveats: one deterministic droplet (the confirmation seeds collapse onto it); at the spec's write strength 0.02 the
-  effect is only 0.5%; the detector and strength were chosen after exploration and frozen before confirmation.
+* Across 11 different droplets (sizes, tensions 3/5/8, grids 32/40) every one recovers its shape and keeps the
+  effect (E = 0.04–0.07); the retained breathing amplitude is nearly universal (ΔA ≈ ±0.045).
+* Caveats: at the spec's write strength 0.02 the effect is only 0.5%; the detector and strength were chosen after
+  exploration and frozen before confirmation; droplets are seeded, finite-lifetime, and centred.
 
 ![atlas](results/atlas/atlas_final_slices.png)
 ![heating and droplet](results/diagnostics/heating_variant.png)
