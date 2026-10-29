@@ -2,7 +2,7 @@
 
 Can a field structure recover its shape while retaining a change that affects its next encounter?
 
-This repository begins with a research plan. No simulator or experimental results are implemented here yet. Complex geometry is a valid research outcome; memory, causal control and useful computation require separate evidence.
+This repository contains a headless simulator and bounded experiments on seeded field structures. Complex geometry is a valid research outcome; memory, causal control and useful computation require separate evidence.
 
 ## Start here
 
@@ -14,8 +14,7 @@ The recommended route is a small, headless 3D extraction of the numerical core o
 ## Handoff (for Sol or anyone continuing)
 
 Tasks 1–5 and the droplet campaign are done (see Current status below). Do **not** rerun them.
-Continue from [HANDOFF.md](HANDOFF.md): it holds the reproduction commands, the caveats to check first, and the one
-most informative next experiment (many droplets instead of one).
+Continue from [HANDOFF.md](HANDOFF.md): it holds the latest checkpoint, reproduction commands, and the caveats to check first.
 
 ## Research ladder
 
@@ -29,13 +28,21 @@ A low-dimensional predictive object model and interactions between such objects 
 
 ## Current status (29 Oct 2026)
 
+**Latest: internal state improves prediction on held-out droplets.** Five configurations train the models;
+six configurations are held out entirely. Amplitude change and relative phase alone do **not** beat the context
+baseline (relative waveform error 0.458 vs 0.402). Adding the reference oscillator's cosine/sine state and their
+changes to context reduces error to **0.218**, meeting the frozen screen on 5/6 held-out droplets. This predicts
+a particular local probe response, not the whole world's future. See the
+[protocol](docs/superpowers/plans/2026-10-29-compact-predictive-state.md),
+[receipt](results/predictive/summary.json), and [interpretation](RESULTS.md#compact-predictive-state-follow-up).
+
 **Yes, for seeded droplets (11/11 tested).** A seeded cold droplet in best.py's rule recovers its shape after a kick but keeps a
 changed internal breathing amplitude. That makes a later probe respond differently, and only the droplet's
 interior carries the change. Full ledger: [RESULTS.md](RESULTS.md). Next step: [HANDOFF.md](HANDOFF.md).
 
 * The solver reproduces best.py's rule exactly (tested against a line-by-line transcription).
-* The voxel "crystal" mosaic is a hot lattice gas, and **the rule heats itself without limit** whenever tension > 0
-  (kinetic energy 0.66 → 2.73 over 4000 steps at tension 5; flat at tension 0). The generic atlas screen found no
+* The voxel "crystal" mosaic behaves like a hot lattice gas. **The recorded kinetic-energy proxy rises over the tested interval**
+  (0.66 → 2.73 over 4000 steps at tension 5; the tension-0 control does not show that heating). This does not establish unbounded growth or exclude every possible energy functional. The generic atlas screen found no
   compact object (0/6), because the positive phase percolates.
 * The seeded bubble survives as a **cold droplet** (radius ~9, 100–900× colder) for ~3000 steps at tension 5,
   insulated by "amplitude slows propagation".
@@ -51,3 +58,5 @@ interior carries the change. Full ledger: [RESULTS.md](RESULTS.md). Next step: [
 ![atlas](results/atlas/atlas_final_slices.png)
 ![heating and droplet](results/diagnostics/heating_variant.png)
 ![breathing memory](results/phase/phase.png)
+
+![held-out prediction](results/predictive/prediction_errors.png)

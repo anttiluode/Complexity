@@ -1,0 +1,97 @@
+{
+  "specs": [
+    {
+      "id": 0,
+      "n": 32,
+      "tension": 3.0,
+      "r": 4
+    },
+    {
+      "id": 1,
+      "n": 32,
+      "tension": 3.0,
+      "r": 5
+    },
+    {
+      "id": 2,
+      "n": 32,
+      "tension": 3.0,
+      "r": 6
+    },
+    {
+      "id": 3,
+      "n": 32,
+      "tension": 5.0,
+      "r": 4
+    },
+    {
+      "id": 4,
+      "n": 32,
+      "tension": 5.0,
+      "r": 5
+    },
+    {
+      "id": 5,
+      "n": 32,
+      "tension": 5.0,
+      "r": 6
+    },
+    {
+      "id": 6,
+      "n": 32,
+      "tension": 8.0,
+      "r": 4
+    },
+    {
+      "id": 7,
+      "n": 32,
+      "tension": 8.0,
+      "r": 5
+    },
+    {
+      "id": 8,
+      "n": 32,
+      "tension": 8.0,
+      "r": 6
+    },
+    {
+      "id": 9,
+      "n": 40,
+      "tension": 5.0,
+      "r": 6
+    },
+    {
+      "id": 10,
+      "n": 40,
+      "tension": 5.0,
+      "r": 7
+    }
+  ],
+  "waits": [
+    300,
+    600,
+    1000
+  ],
+  "train_ids": [
+    0,
+    2,
+    4,
+    6,
+    8
+  ],
+  "window": 192,
+  "probe": 0.002,
+  "write": 0.2,
+  "horizon": 50,
+  "sources": {
+    "complexity/predictive.py": "8064afafa04cc07945362a6ceb7d4f8930a8966e980434588cdad4ece0ccef92",
+    "complexity/core.py": "a3c5bcce4307059b95e69a10a90da57fc351594b606886786a24727ff5d5cd50",
+    "complexity/analysis.py": "fa0f6ed1c6d470b83aa135bf41e00c2446441d1b53d95743d6ec70f7b713255e",
+    "complexity/droplet.py": "20664acdf5f15715744e47440b7db07c7127105ea33dbdb5481944469f9c5b40",
+    "complexity/many_droplets.py": "09b28413cf9aebfdc3e032d021ca481d0c893b57e74513d5538b70d1f0295b89",
+    "docs/superpowers/plans/2026-10-29-compact-predictive-state.md": "bce0ceee1b85de3f784067b223b68483dd207c3ed3a1af356ff6ab5f450a85b6"
+  },
+  "numpy": "2.3.5",
+  "scipy": "1.17.0",
+  "hash": "614c7eb4634045846c4a5849e6cab71074feab8a7f784fb4bd920bd2735c0ebf"
+}

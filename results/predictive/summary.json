@@ -1,0 +1,138 @@
+{
+  "status": "complete",
+  "protocol_hash": "614c7eb4634045846c4a5849e6cab71074feab8a7f784fb4bd920bd2735c0ebf",
+  "completed_droplets": 11,
+  "simulation_seconds": 120.72866909100003,
+  "python": "3.12.14",
+  "machine": "x86_64",
+  "implementation_commit": "b084d4b23eed2e3f74a3d54f120405e27eba2335",
+  "assessment": {
+    "scores": {
+      "zero": {
+        "relative_rmse": 1.0,
+        "by_droplet": {
+          "1": 1.0,
+          "3": 1.0,
+          "5": 1.0,
+          "7": 1.0,
+          "9": 1.0,
+          "10": 1.0
+        },
+        "recovered_relative_rmse": 1.0,
+        "grid32_relative_rmse": 1.0,
+        "grid40_relative_rmse": 1.0
+      },
+      "mean": {
+        "relative_rmse": 0.9323846899358328,
+        "by_droplet": {
+          "1": 0.9384826402366929,
+          "3": 0.9290399910584549,
+          "5": 0.9274689648368777,
+          "7": 0.9454045559465715,
+          "9": 0.9274369081768187,
+          "10": 0.9296795980475064
+        },
+        "recovered_relative_rmse": 0.9323846899358328,
+        "grid32_relative_rmse": 0.9347997498979449,
+        "grid40_relative_rmse": 0.928590678027335
+      },
+      "context": {
+        "relative_rmse": 0.4024833170732005,
+        "by_droplet": {
+          "1": 0.6351452438378946,
+          "3": 0.36792439220180917,
+          "5": 0.36579328034823855,
+          "7": 0.316785720244889,
+          "9": 0.36477028997409694,
+          "10": 0.437943304614048
+        },
+        "recovered_relative_rmse": 0.4024833170732005,
+        "grid32_relative_rmse": 0.4014787685121324,
+        "grid40_relative_rmse": 0.4040511787106639
+      },
+      "shape_context": {
+        "relative_rmse": 1.1729759067557117,
+        "by_droplet": {
+          "1": 3.0056881311390513,
+          "3": 0.8992903120360487,
+          "5": 0.39194611430117127,
+          "7": 0.588195893739687,
+          "9": 1.2778296642532332,
+          "10": 0.6808766556681793
+        },
+        "recovered_relative_rmse": 1.1729759067557117,
+        "grid32_relative_rmse": 1.263212155757727,
+        "grid40_relative_rmse": 1.0157107814997348
+      },
+      "delta_state": {
+        "relative_rmse": 0.45828317593862067,
+        "by_droplet": {
+          "1": 0.682904812169325,
+          "3": 0.40537530865288474,
+          "5": 0.43558979093293554,
+          "7": 0.363624824155077,
+          "9": 0.44231606596567885,
+          "10": 0.49159481204345723
+        },
+        "recovered_relative_rmse": 0.45828317593862067,
+        "grid32_relative_rmse": 0.45176876175920316,
+        "grid40_relative_rmse": 0.46830116986316966,
+        "groups_passing": 0,
+        "screen_pass": false
+      },
+      "absolute_state_context": {
+        "relative_rmse": 0.21806350109302924,
+        "by_droplet": {
+          "1": 0.5545397643040366,
+          "3": 0.10942677681514554,
+          "5": 0.1470473760926762,
+          "7": 0.09509494247395797,
+          "9": 0.14296366320041018,
+          "10": 0.22666964330039077
+        },
+        "recovered_relative_rmse": 0.21806350109302924,
+        "grid32_relative_rmse": 0.2338971121341301,
+        "grid40_relative_rmse": 0.19064856221325457,
+        "groups_passing": 5,
+        "screen_pass": true
+      }
+    },
+    "feature_counts": {
+      "context": {
+        "raw": 5,
+        "quadratic": 20
+      },
+      "shape_context": {
+        "raw": 19,
+        "quadratic": 209
+      },
+      "delta_state": {
+        "raw": 4,
+        "quadratic": 14
+      },
+      "absolute_state_context": {
+        "raw": 9,
+        "quadratic": 54
+      }
+    },
+    "train_ids": [
+      0,
+      2,
+      4,
+      6,
+      8
+    ],
+    "test_ids": [
+      1,
+      3,
+      5,
+      7,
+      9,
+      10
+    ],
+    "train_rows": 30,
+    "test_rows": 36,
+    "recovered_rows": 66,
+    "max_harmonic_relative_residual": 0.22023904509353756
+  }
+}

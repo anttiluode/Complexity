@@ -1,3 +1,52 @@
+# Handoff — 29 Oct 2026 (Codex/Astra continuation)
+
+## Latest checkpoint
+
+Claude's original campaign and 11-droplet follow-up are complete. The compact predictive-state follow-up
+is now also complete. Do not rerun those campaigns. Read RESULTS.md, section "Compact predictive state
+follow-up", and results/predictive/summary.json.
+
+- Five droplets train, six entirely held out; two signs and three waits each.
+- Delta amplitude/phase + tension fails to beat context (relative error 0.458 vs 0.402).
+- Reference cosine/sine state plus their changes and context improves error to 0.218; frozen screen passes on 5/6 test droplets.
+- All 66 cases recover the operational shape. A complete two-number state or autonomous reduced simulator is not established.
+- Simulator cost 120.73 s within a 600-second cap. Inputs, sensor targets, hashes and predictions are retained.
+- Models require pre-probe history and an untouched reference twin; no speed/storage advantage is claimed.
+
+## Reproduce latest result
+
+```bash
+python -m pytest -q
+OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 python -m complexity.predictive --out results/predictive_reproduction --max-seconds 600
+```
+
+Matching receipts are reused. Changed code/protocol/environment requires a new output directory.
+The thread environment variables can be omitted on Windows; the Python command is portable.
+
+## ONE next experiment (not run)
+
+Vary write arrival time so the same kick reaches a different initial breathing phase. Hold out whole
+write-time groups; freeze predictors before examining outcomes. Compare measured internal state against
+time/sign/context controls. This probes transfer beyond the synchronized protocol used so far.
+
+## Execution record and rulings
+
+- Isolated branch/worktree from 39e1ee2; original numerical equations unchanged.
+- Protocol and tested runner committed before simulation as b084d4b.
+- Baseline: 25 tests passed. New tests first failed on the missing module; then eight focused tests and the full 33-test suite passed.
+- Ruling: the user continuation authorizes this bounded follow-up; the earlier first-session stop no longer applies.
+- Ruling: predict waveforms, include context/reference-state baselines. Cost: small regression fits, no extra field simulations. If the decoder is too restrictive, its failure does not reject compact-state models generally.
+- Ruling: narrow unlimited-heating/no-energy-functional claims to finite observations. Existing measurements unchanged.
+- Final fresh-context scientific/code review: no leakage or response-subtraction defects found; saved assessment independently reproduced.
+- Important fix: interrupted runs no longer receive a fresh budget. Two regression tests failed before the fix and pass afterward; final suite 35/35 passed. Completed receipt time is charged and an in-flight attempt conservatively reserves the remaining allowance.
+- Deferred minor: cached reruns update summary implementation_commit to current analysis HEAD. Original generating provenance remains in the archived manifest and b084d4b; separate generating/analysis commit fields are future polish.
+- Deferred minor in frozen plan: its three-cycle wording is imprecise. At wait 300 the window begins 109 steps after writing (2.45 cycles); the 192-sample window itself spans 4.32 cycles. No timing or model changed after outcomes.
+- Ruling: final review did not rerun the full simulation or test arbitrary fields; the claim remains restricted to the saved deterministic benchmark.
+- The post-run budget fix changes the code hash. Archived receipts remain immutable: use a new output directory for fresh simulation, or evaluate saved targets without rerunning physics.
+- Analysis replay matches exactly with the original one-thread BLAS setting; changing thread settings may change floating-point last digits.
+
+## Previous campaign handoff (historical; next-step text superseded)
+
 # Handoff — 29 Oct 2026 (Claude, Opus 5.5)
 
 ## State
@@ -40,3 +89,10 @@ tension. Test whether a two-number state (ΔA, Δphase), plus the droplet's tens
 written droplet *held out* from the fit: fit on half of the 11 droplets × 2 signs × 3 waits, predict the rest, and
 compare against a shape-only predictor (which, since shape recovers, should predict no difference). Spec Stage-C
 follow-up item; about 10 simulation minutes.
+
+## Publication provenance
+
+Shell git push could not authenticate, so publication uses the connected GitHub plugin. The locally committed
+pre-experiment source tree b084d4b is preserved unchanged in published commit 50b08457286747abb4f59926349792b5fede98db.
+The saved manifest identifies the exact measured file contents. Local and published commit IDs differ because
+the connector creates new commit metadata; this does not change the measured source tree or data.

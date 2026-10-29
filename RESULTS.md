@@ -25,7 +25,7 @@ Machine: cloud CPU, 2 cores, Python 3.13.18, NumPy 2.5.3, SciPy 1.18.1. Total si
 | 3 | A compact persistent structure exists in the 6-configuration atlas | `python -m complexity atlas` (N=32, 2000 steps, box/sphere/torus × tension 1/5) | spec screen at threshold 0.5·√5 over the final 500 steps | 0 of 6 eligible. Best: box, tension 5, track fraction 0.48 (needs ≥ 0.90), volume CV 0.46 (needs ≤ 0.25). Others: 0.00–0.16 tracked | one grid, one seed, seeded (not spontaneous) morphology | **fail** → memory branch stops |
 | 4 | Why (3) fails | `results/atlas/*` histories | three thresholds | the positive phase fills 53–93% of the box and percolates: the largest component is 55–93% of the domain (screen cap 25%). What remains trackable are transient fragments of 16–140 voxels in a voxel-scale ± mosaic | — | **explained** (detector defeated by a percolating hot background) |
 | 5 | The seeded box bubble persists inside that mosaic | `complexity/diagnostics.py: cold_core` | tension 1 vs 5 | **tension 5:** a cold core of radius 9 cells holds from step 450 to 3650; centre smoothed v²/2 is 0.003–0.05 against 1.2–2.8 outside (100–900× colder), φ ≈ 2.15 (the + vacuum). **Tension 1:** the core melts between steps 850 and 1250 | box only, one seed; not a gated result | **observed** (not screened) |
-| 6 | The best.py rule conserves or dissipates energy | `diagnostics.heating`, `tests/test_diagnostics.py` | tension 0 (ordinary φ⁴ wave equation) | tension 0: energy 1.26 → 0.89 (damping). **Tension 1: kinetic 0.80 → 3.60; tension 5: 0.66 → 2.73**, still rising at step 4000. With damping 0 (test), kinetic grows over 1.5× in 1500 steps | lattice energy defined for the φ⁴ part | **fails**: c²(φ)∇²φ = ∇·(c²∇φ) − ∇c²·∇φ is not the variation of any energy, so the rule pumps energy into the lattice |
+| 6 | The best.py rule conserves or dissipates the tested energy diagnostic | `diagnostics.heating`, `tests/test_diagnostics.py` | tension 0 (ordinary φ⁴ wave equation) | tension 0: energy 1.26 → 0.89 (damping). **Tension 1: kinetic 0.80 → 3.60; tension 5: 0.66 → 2.73**, still rising at step 4000. With damping 0 (test), kinetic grows over 1.5× in 1500 steps | lattice energy defined for the φ⁴ part; no long-time theorem or general energy-functional classification | **fails for this diagnostic**. The source rule differs from the tested variational variant. The finite runs establish increased kinetic proxy, not unbounded heating or impossibility of every alternative energy functional. |
 | 7 | A conservative version of the same law stops the heating and keeps the droplet | `diagnostics.variant_check` (labelled VARIANT, wrap, tension 5) | source rule, same start | variant energy 1.19 → 0.89 (no heating; under 5% drift with damping 0, `tests/test_diagnostics.py`). But its droplet merges with the surroundings by ~3300 steps; the source droplet is still ~20× colder at 4000 and warming | exploratory variant, one run | **mixed**: heating removed, persistence not improved |
 
 | 8 | The seeded droplet is a persistent structure under a pre-specified detector | `complexity/droplet.py` (smoothed v²/2 < 0.25 × outer-shell median, connected to the centre; equivalent radius ≥ 6 in ≥ 90% of samples, steps 500–2500), box, tension 5, nearest, N=32, seeds 101–103 with 1e-4 noise | — | **pass** in all 3 seeds, float32 and float64: 100% of samples ≥ 6, minimum radius 8.33–8.41 | **[deviation]** detector designed after seeing the atlas (fixed before Stage B); finite lifetime ~3000 steps | proceed |
@@ -66,10 +66,9 @@ The mechanism is the opposite of the toy model in the design (amplitude heals, p
 breathing amplitude is the memory, because damping is 1e-4 per step and the gas radiates slowly. The phase
 drifts because amplitude sets frequency.
 
-Spec categories reached: morphology only ✓, persistent field structure ✓ (finite lifetime, pre-specified
+Spec categories reached in the original campaign: morphology only ✓, persistent field structure ✓ (finite lifetime, pre-specified
 detector), retained history ✓, changed incremental response ✓ (at strength 0.2, not 0.02), localized causal
-carrier ✓. **Compact predictive state: not tested**, though the breathing amplitude (plus phase) is the obvious
-candidate.
+carrier ✓. Compact predictive state was not tested in that campaign; the follow-up below now evaluates a limited predictive descriptor.
 
 ## Not claimed
 
@@ -78,3 +77,75 @@ grids). Spontaneous structure (the droplet is seeded). Indefinite persistence (i
 ~3000 steps as the rule heats the lattice). Anything about the multichannel crystal_kingdom model, the rain
 meshes, or best.py's nested sub-simulations (excluded by design). Any claim at the spec's write strength
 0.02 beyond "a linear local effect of E ≈ 0.5%, below the screen".
+
+## Compact predictive state follow-up
+
+Codex/Astra, 29 Oct 2026, continuing 39e1ee2. Protocol and runner were committed as **b084d4b before the new
+simulation**; settings, split, features, models and criteria were frozen in
+[the continuation plan](docs/superpowers/plans/2026-10-29-compact-predictive-state.md).
+The droplet family was already selected for showing effects: this is a new grouped prediction test, not a
+blind sample of arbitrary fields. The old campaigns were not rerun.
+
+**Target:** signed (written probe response minus sham probe response) at seven fixed local sensors over
+50 steps, divided by probe amplitude. Each probe response subtracts its own matched no-probe trajectory.
+Features use only the 192 samples before probing; future response samples never enter them. Full-field D/E
+is recorded, but predicting scalar E alone is not the endpoint.
+
+11 configurations × two signs × waits 300/600/1000 **steps** = 66 cases. Five entire configurations (30 cases)
+train; six entire configurations (36 cases) are held out, including both N=40 settings. All 66 recover the
+operational shape; minimum final raw IoU 0.929. Full-field E ranges 0.041–0.187, so not every row meets the
+original E>=0.05 effect gate.
+
+All learned models use quadratic ridge, alpha=1, training-only scaling. Context is tension, grid size,
+seeded width, wait and write sign. Internal coordinates come from fixed-frequency least-squares fits to
+the core mean, with the probe instant as phase reference.
+
+| Predictor | Raw features / quadratic terms | Held-out relative waveform RMSE | N=32 | N=40 |
+|---|---:|---:|---:|---:|
+| Predict no change | — | 1.000 | 1.000 | 1.000 |
+| Training mean | — | 0.932 | 0.935 | 0.929 |
+| Context only | 5 / 20 | **0.402** | 0.401 | 0.404 |
+| Shape + context | 19 / 209 | 1.173 | 1.263 | 1.016 |
+| Delta amplitude, circular delta phase, tension | 4 / 14 | 0.458 | 0.452 | 0.468 |
+| Reference cosine/sine state + changes + context | 9 / 54 | **0.218** | 0.234 | 0.191 |
+
+Relative RMSE is ||prediction-target||/||target||, not classification accuracy. Circular delta phase uses
+sin(delta) and 1-cos(delta). The richer model uses four internal coordinates: sham cosine/sine coefficients
+and their written-minus-sham changes. These plus context are **not a two-scalar complete state**.
+
+The delta-only proposal **fails** to outperform context. The richer descriptor **passes the frozen screen**:
+aggregate error <=0.5, >=25% below the best baseline, and both requirements on >=4 held-out configurations.
+It passes on five of six. ID 1 (N=32, tension 3, width 5) fails with error 0.555. Aggregate improvement over
+context is 45.8% in relative RMSE.
+
+**Interpretation and limits:** internal dynamics add transferable predictive information for this local probe.
+Several coordinates were added together, so this does not isolate absolute phase as the unique cause of
+improvement. Failure of the delta-only decoder does not prove that no better decoder exists. The shape model
+has many features relative to 30 training rows; its failure does not prove shape has zero information. The
+cold mask also uses velocity, so it is not a purely visual measurement.
+
+These are deterministic centered seeded droplets, one initialization seed, fixed write time/strength/probe,
+three waits, and no uncertainty interval across independent campaigns. Fixed frequency sqrt(2)*dt gives a
+maximum harmonic-fit relative residual of 0.220. Features require history and an untouched twin. There is no
+autonomous reduced simulator, demonstrated storage/speed advantage, or complete-state sufficiency result.
+
+**Cost:** 120.73 simulator seconds, float64, Python 3.12.14, NumPy 2.3.5, SciPy 1.17.0; 11/11 completed,
+no failed or budget-stopped configurations. Per-droplet features and sensor targets, hashes, split and predictions
+are saved under results/predictive. Reproduce with:
+
+```bash
+python -m pytest -q
+OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 python -m complexity.predictive --out results/predictive_reproduction --max-seconds 600
+```
+
+Matching completed receipts are reused; changed protocol/code/environment requires a fresh output directory.
+The manifest records the implementation used, independently of later documentation commits.
+
+**Next test, not run:** vary write arrival time and hold out whole write-time groups. Keep the predictors
+frozen and compare measured state against time/sign/context controls. This tests generalization beyond the
+present synchronized write schedule.
+
+**Audit correction:** row 6 and README now describe finite-time heating of the measured diagnostic. Finite
+observations and one variational comparison do not prove unlimited heating or exclude all energy functionals.
+
+Final review found no scientific-path defect. An interrupted-run budget bug was fixed after the campaign; two regression tests failed before the fix and now pass. Archived measurement code/hash remains b084d4b. Analysis reproduced exactly with the same one-thread BLAS setting after the fix. Final suite: **35 tests passed**. The frozen plan's timing wording is qualified in HANDOFF.md: the feature window spans more than three cycles, but starts only 2.45 cycles after the earliest write.
