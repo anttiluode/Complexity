@@ -148,17 +148,6 @@ def variant_check(tension=5.0, n=32, steps=4000, every=250):
     return out
 
 
-if __name__ == "__main__":
-    out = "results/diagnostics"
-    os.makedirs(out, exist_ok=True)
-    res = [cold_core("box", 1.0), cold_core("box", 5.0)]
-    json.dump(res, open(os.path.join(out, "cold_core.json"), "w"))
-    plot_cold(res, os.path.join(out, "cold_core.png"))
-    for r in res:
-        print(r["kind"], r["tension"], [(x["step"], x["r_cold"], round(x["e_center"], 3), round(x["e_outer"], 3),
-                                         round(x["phi_center"], 2)) for x in r["rows"][::8]])
-
-
 def plot_summary(heat_path="results/diagnostics/heating.json", var_path="results/diagnostics/variant_check.json",
                  out="results/diagnostics/heating_variant.png"):
     import matplotlib
@@ -192,3 +181,14 @@ def plot_atlas_finals(atlas_dir="results/atlas", out="results/atlas/atlas_final_
             ax[i, j].set_title(f"{nm} {'step 1000' if i == 0 else 'step 2000'}", fontsize=8)
             ax[i, j].set_xticks([]); ax[i, j].set_yticks([])
     fig.tight_layout(); fig.savefig(out, dpi=80); plt.close(fig)
+
+
+if __name__ == "__main__":
+    out = "results/diagnostics"
+    os.makedirs(out, exist_ok=True)
+    res = [cold_core("box", 1.0), cold_core("box", 5.0)]
+    json.dump(res, open(os.path.join(out, "cold_core.json"), "w"))
+    plot_cold(res, os.path.join(out, "cold_core.png"))
+    for r in res:
+        print(r["kind"], r["tension"], [(x["step"], x["r_cold"], round(x["e_center"], 3), round(x["e_outer"], 3),
+                                         round(x["phi_center"], 2)) for x in r["rows"][::8]])

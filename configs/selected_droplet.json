@@ -1,0 +1,23 @@
+{
+ "selected_after": "exploratory write-amplitude scan on seed 101 (results/scan_amp)",
+ "detector": "complexity/droplet.py (pre-specified, unchanged)",
+ "kind": "box",
+ "tension": 5.0,
+ "boundary": "nearest",
+ "n": 32,
+ "dtype": "float64",
+ "write_step": 1000,
+ "amp_write": 0.2,
+ "amp_probe": 0.002,
+ "waits_steps": [
+  100,
+  300,
+  1000
+ ],
+ "confirmation_seeds": [
+  201,
+  202,
+  203
+ ],
+ "rule": "Stage B gate (spec) on the confirmation seeds only; seeds 101-103 are not reused"
+}

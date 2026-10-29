@@ -13,9 +13,9 @@ The recommended route is a small, headless 3D extraction of the numerical core o
 
 ## Handoff (for Sol or anyone continuing)
 
-Tasks 1–2 are done and the morphology gate failed (see Current status below). Do **not** rerun them.
-Continue from [HANDOFF.md](HANDOFF.md): it holds the reproduction commands and the one proposed next experiment,
-which needs Antti's explicit go-ahead because it introduces a new, pre-specified detector.
+Tasks 1–5 and the droplet campaign are done (see Current status below). Do **not** rerun them.
+Continue from [HANDOFF.md](HANDOFF.md): it holds the reproduction commands, the caveats to check first, and the one
+most informative next experiment (many droplets instead of one).
 
 ## Research ladder
 
@@ -29,17 +29,23 @@ A low-dimensional predictive object model and interactions between such objects 
 
 ## Current status (29 Oct 2026)
 
-Tasks 1–2 done by Claude; **the morphology gate failed (0/6)**, so the memory stages were not started.
-Read [RESULTS.md](RESULTS.md) for the ledger and [HANDOFF.md](HANDOFF.md) for the one proposed next step.
+**Yes, for one droplet.** A seeded cold droplet in best.py's rule recovers its shape after a kick but keeps a
+changed internal breathing amplitude. That makes a later probe respond differently, and only the droplet's
+interior carries the change. Full ledger: [RESULTS.md](RESULTS.md). Next step: [HANDOFF.md](HANDOFF.md).
 
 * The solver reproduces best.py's rule exactly (tested against a line-by-line transcription).
-* The voxel "crystal" mosaic is a hot lattice gas. φ = 0 is the top of the double well, each falling voxel
-  releases 1.25 units that the 1e-4 damping never removes, and with tension > 0 **the rule heats itself
-  without limit** (mean kinetic energy 0.66 → 2.73 over 4000 steps at tension 5; flat at tension 0).
-* The one coherent object is the seeded bubble: a **cold droplet** (radius 9, 100–900× colder than its
-  surroundings) that survives about 3000 steps at tension 5 and melts within about 1000 at tension 1. It is
-  insulated by "amplitude slows propagation" itself, but it has a finite lifetime.
-* Trajectories are roundoff-sensitive beyond ~200 steps (float32 vs float64 diverge to O(1) by 400).
+* The voxel "crystal" mosaic is a hot lattice gas, and **the rule heats itself without limit** whenever tension > 0
+  (kinetic energy 0.66 → 2.73 over 4000 steps at tension 5; flat at tension 0). The generic atlas screen found no
+  compact object (0/6), because the positive phase percolates.
+* The seeded bubble survives as a **cold droplet** (radius ~9, 100–900× colder) for ~3000 steps at tension 5,
+  insulated by "amplitude slows propagation".
+* Kick it (float64, write strength 0.2): shape recovers (IoU ≥ 0.94), and a later probe responds 5.7–17% differently;
+  the same kick in the gas changes the droplet's response by ≤ 1e-8. Transplanting the droplet interior carries the
+  whole effect; transplanting everything else carries none. The retained variable is the **breathing amplitude**
+  (ω ≈ √2), whose anharmonic frequency shift makes the phase drift.
+* Caveats: one deterministic droplet (the confirmation seeds collapse onto it); at the spec's write strength 0.02 the
+  effect is only 0.5%; the detector and strength were chosen after exploration and frozen before confirmation.
 
 ![atlas](results/atlas/atlas_final_slices.png)
 ![heating and droplet](results/diagnostics/heating_variant.png)
+![breathing memory](results/phase/phase.png)

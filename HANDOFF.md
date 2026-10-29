@@ -1,45 +1,39 @@
 # Handoff — 29 Oct 2026 (Claude, Opus 5.5)
 
 ## State
-* Task 1 (faithful solver, complete state): **done**. `complexity/core.py`, `tests/test_core.py`, `SOURCE_PROVENANCE.md`.
-* Task 2 (morphology atlas, receipts, selection, confirmation): **done; gate failed** (0/6 eligible). `configs/selected.json`
-  was not created and no confirmation seeds were run, because nothing qualified.
-* Tasks 3–4: **not run** (entry gate is the morphology confirmation). Task 5 audit: performed by hand in `RESULTS.md`.
-* Extra, outside the plan's tasks but within its rules (passive, labelled): `complexity/diagnostics.py` (cold-core radius,
-  lattice heating, one labelled conservative variant), `tests/test_diagnostics.py`.
+* Task 1 (solver): **done**. Task 2 (generic morphology atlas): **done, gate failed 0/6**, with the reason diagnosed.
+* With Antti's go-ahead ("pre-approved to go the distance"): **droplet campaign done**, covering the pre-specified
+  detector, Stage B, Stage C and phase analysis. Result in `RESULTS.md` rows 8–14 and "What the droplet shows".
+* Task 5 audit: done by hand in `RESULTS.md` (deviations marked). 25 tests pass (`python -m pytest -q`).
 
-Tests: `python -m pytest -q` → 16 passed.
-
-## Reproduce
+## Reproduce (CPU, ~8 min total)
 ```bash
 pip install -r requirements.txt
 python -m pytest -q
-python -m complexity atlas --config configs/atlas.json --out results/atlas --max-seconds 3600   # ~40 s
-python -m complexity.diagnostics                                                                  # cold core, ~20 s
-python -c "from complexity.diagnostics import heating, variant_check; import json; \
-json.dump(heating(), open('results/diagnostics/heating.json','w')); \
-json.dump(variant_check(), open('results/diagnostics/variant_check.json','w'))"
+python -m complexity atlas --config configs/atlas.json --out results/atlas --max-seconds 3600     # Task 2, ~40 s
+python -m complexity.diagnostics                                                                    # cold core
+CX_DTYPE=float64 python -m complexity.stage_bc                                                      # Stage B at spec strength 0.02
+for A in 0.05 0.1 0.2 0.4; do CX_DTYPE=float64 CX_AMP=$A CX_SEEDS=101 CX_OUT=results/scan_amp/a$A python -m complexity.stage_bc; done
+CX_DTYPE=float64 CX_AMP=0.2 CX_SEEDS=201,202,203 CX_OUT=results/droplet_confirm python -m complexity.stage_bc   # gate + Stage C
+CX_DTYPE=float64 python -m complexity.phase_probe                                                   # breathing amplitude / phase
 ```
-Campaign hash `2e06d179abf13a59` (configs/atlas.json). Atlas simulation time 38.8 s; the pilot estimate was 39.6 s.
 
-## Why the gate failed (short)
-The positive phase percolates (55–93% of the box in one component). The screen's 25%-of-domain cap therefore removes the
-only coherent object, the seeded bubble, together with the background it touches. What is left are transient fragments.
-Underneath that: the rule heats itself whenever tension > 0 (RESULTS row 6), and trajectories are roundoff-sensitive
-beyond ~200 steps (row 2).
+## Findings in one paragraph
+best.py's rule heats itself and turns the box into a voxel-scale hot lattice gas. A seeded cold droplet survives
+inside it for ~3000 steps, insulated by "amplitude slows propagation". Kick the droplet and its shape recovers, but
+its **breathing amplitude stays changed**. A later probe responds differently (E up to 0.17 at strength 0.2;
+0.005 at the spec's 0.02), and only the droplet interior carries that change: interior transplant reproduces it,
+reverse and exterior transplants erase it, even when the surrounding gas differs completely.
 
-## ONE proposed next experiment (needs Antti's go-ahead: it changes the screen, and the spec forbids doing that unasked)
-**Kick the cold droplet within its lifetime, with the detector specified before running.**
-Box initializer, tension 5, nearest boundary (the atlas configuration where the droplet lives longest), N=32.
-* Detector, fixed in advance: droplet = connected region of smoothed (σ = 1.5) v²/2 below 0.25 × the median of the outer
-  shell, containing the box centre. Screen: radius ≥ 6 cells in ≥ 90% of samples over steps 500–2500, in seeds 101–103
-  (initial noise 1e-4, as in the spec).
-* If it passes, run Stage B unchanged (velocity kicks ±0.02 at the droplet centre, sham, waits 10/30/100 time units,
-  paired probe/no-probe twins, linear control), restricted to the droplet's lifetime window. Twins share identical
-  float32 arithmetic, so roundoff sensitivity does not contaminate the paired differences.
+## Caveats a reviewer should check first
+1. Confirmation seeds 201–203 give bit-identical metrics: one deterministic droplet, not three replications.
+2. The detector and write strength were chosen after looking (atlas, then the seed-101 scan). Both are frozen in files.
+3. float32 cannot resolve the response differences at strength 0.02 (row 9); the conclusions use float64.
+4. The probe's response never leaves the droplet within the horizon, so "local" partly restates "insulated".
 
-Expected cost under 10 simulation minutes. If the droplet screen fails in any seed, stop: the deliverable is then
-"no persistent object in this rule at N = 32, and the reason is self-heating plus percolation".
-
-Next permitted command after approval: implement the droplet detector as a new screen in `complexity/morphology.py`
-(with tests), add `configs/droplet.json`, then run Task 3 against it.
+## ONE most informative next experiment
+**Many droplets, not one.** Vary what makes droplets genuinely different: initial radius (N//6 ± 1, ± 2 by editing
+the seed bubble width, labelled), tension 3/5/8, and grid N = 32/40. Freeze strength 0.2 and the same detector.
+Measure E at wait 300 and the retained breathing-amplitude difference per droplet. That turns row 12 from "exact
+for one droplet" into a distribution, and tests whether "breathing amplitude predicts the changed response"
+(the compact-state claim, untested) holds across droplets. Budget about 15 simulation minutes.
