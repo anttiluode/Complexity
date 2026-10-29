@@ -82,3 +82,32 @@ def test_resume_requires_exact_protocol_and_complete_droplet(tmp_path):
 def test_evaluation_rejects_partial_dataset():
     with pytest.raises(ValueError, match='complete'):
         p.evaluate([], np.empty((0, 50, 7)))
+
+
+def test_resume_charges_completed_receipts_when_summary_is_missing(tmp_path, monkeypatch):
+    # A saved droplet can outlive the parent process and its absent summary.
+    p.atomic_json(tmp_path/'droplet_00.json', dict(protocol_hash=p.protocol()['hash'],
+                  status='complete', seconds=590., rows=[]))
+    def stop_at_next_droplet(spec, deadline):
+        raise TimeoutError('represent unavailable remaining simulation time')
+    monkeypatch.setattr(p, 'collect_droplet', stop_at_next_droplet)
+    result = p.campaign(tmp_path, 600.)
+    assert result['status'] == 'budget_stop'
+    assert 590. <= result['simulation_seconds'] < 591.
+
+
+def test_interrupted_attempt_reserves_budget_before_starting(tmp_path, monkeypatch):
+    # Replace expensive field evolution with interruption; exercise real disk bookkeeping.
+    import json
+    def interrupted(spec, deadline):
+        raise KeyboardInterrupt
+    monkeypatch.setattr(p, 'collect_droplet', interrupted)
+    with pytest.raises(KeyboardInterrupt):
+        p.campaign(tmp_path, 60.)
+    receipt = json.loads((tmp_path/'summary.json').read_text())
+    assert receipt['status'] == 'running'
+    assert receipt['simulation_seconds'] == 60.
+    # No surviving process can say how much of the interrupted allocation was spent.
+    result = p.campaign(tmp_path, 60.)
+    assert result['status'] == 'budget_stop'
+    assert result['simulation_seconds'] >= 60.

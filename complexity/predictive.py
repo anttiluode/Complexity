@@ -256,17 +256,27 @@ def campaign(out, max_seconds):
         raise ValueError('protocol/code hash changed; use a new output directory')
     atomic_json(manifest_path, proto)
     summary_path = out/'summary.json'
-    prior_seconds = json.loads(summary_path.read_text()).get('simulation_seconds', 0.) if summary_path.exists() else 0.
+    cached = {s['id']: read_receipt(out/f"droplet_{s['id']:02d}.json", proto['hash']) for s in specs()}
+    receipt_seconds = sum(d.get('seconds', 0.) for d in cached.values() if d is not None)
+    prior_seconds = max(receipt_seconds,
+                        json.loads(summary_path.read_text()).get('simulation_seconds', 0.) if summary_path.exists() else 0.)
     started = time.monotonic()
     deadline = started + max(0., max_seconds-prior_seconds)
     all_rows = []
     status = 'complete'
     for spec in specs():
         path = out/f"droplet_{spec['id']:02d}.json"
-        data = read_receipt(path, proto['hash'])
+        data = cached[spec['id']]
         if data is None:
             tick = time.monotonic()
             try:
+                check_deadline(deadline)
+                # Reserve the full remaining allowance before any new simulation.
+                # A hard interruption cannot report elapsed time: conservatively charge
+                # its reservation. Normal completion/timeout replaces it with measured time.
+                atomic_json(summary_path, dict(status='running', protocol_hash=proto['hash'],
+                            simulation_seconds=max_seconds, completed_droplets=len(all_rows)//6,
+                            budget_note='Interrupted attempts consume their reserved allowance.'))
                 rows = collect_droplet(spec, deadline)
             except TimeoutError:
                 status = 'budget_stop'
@@ -277,6 +287,9 @@ def campaign(out, max_seconds):
             print(f"droplet {spec['id']}: {data['seconds']:.1f}s; "
                   f"recovered {sum(r['recovered'] for r in rows)}/6", flush=True)
         all_rows.extend(data['rows'])
+        atomic_json(summary_path, dict(status='checkpoint', protocol_hash=proto['hash'],
+                    simulation_seconds=prior_seconds+time.monotonic()-started,
+                    completed_droplets=len(all_rows)//6))
     summary = dict(status=status, protocol_hash=proto['hash'], completed_droplets=len(all_rows)//6,
                    simulation_seconds=prior_seconds+time.monotonic()-started,
                    python=platform.python_version(), machine=platform.machine())
