@@ -1,0 +1,17 @@
+{
+  "n": 32,
+  "steps": 2000,
+  "sample_every": 10,
+  "screen_last": 500,
+  "chunk": 50,
+  "pilot": true,
+  "seed": 0,
+  "runs": [
+    {"kind": "box", "tension": 1.0},
+    {"kind": "box", "tension": 5.0},
+    {"kind": "sphere", "tension": 1.0},
+    {"kind": "sphere", "tension": 5.0},
+    {"kind": "torus", "tension": 1.0},
+    {"kind": "torus", "tension": 5.0}
+  ]
+}

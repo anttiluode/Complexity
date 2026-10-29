@@ -1,0 +1,189 @@
+{
+ "campaign_hash": "2e06d179abf13a59",
+ "campaign": {
+  "n": 32,
+  "steps": 2000,
+  "sample_every": 10,
+  "screen_last": 500,
+  "chunk": 50,
+  "pilot": true,
+  "seed": 0,
+  "runs": [
+   {
+    "kind": "box",
+    "tension": 1.0
+   },
+   {
+    "kind": "box",
+    "tension": 5.0
+   },
+   {
+    "kind": "sphere",
+    "tension": 1.0
+   },
+   {
+    "kind": "sphere",
+    "tension": 5.0
+   },
+   {
+    "kind": "torus",
+    "tension": 1.0
+   },
+   {
+    "kind": "torus",
+    "tension": 5.0
+   }
+  ]
+ },
+ "runs": [
+  {
+   "name": "box_t1_s0",
+   "kind": "box",
+   "tension": 1.0,
+   "seed": 0,
+   "noise_std": 0.0,
+   "boundary": "nearest",
+   "config_hash": "715f23cb3c285e83",
+   "checkpoint": "checkpoints/box_t1_s0.npz",
+   "resumed_from": null,
+   "status": "completed",
+   "completed_steps": 2000,
+   "seconds": 5.534399859000018,
+   "screen": {
+    "eligible": false,
+    "track_fraction": 0.16,
+    "volume_cv": 0.34525353003264136,
+    "mean_volume": 25.0,
+    "reason": "track fraction 0.16 < 0.9; volume CV 0.345 > 0.25"
+   },
+   "order": 0
+  },
+  {
+   "name": "box_t5_s0",
+   "kind": "box",
+   "tension": 5.0,
+   "seed": 0,
+   "noise_std": 0.0,
+   "boundary": "nearest",
+   "config_hash": "3642be9d208cf4c5",
+   "checkpoint": "checkpoints/box_t5_s0.npz",
+   "resumed_from": null,
+   "status": "completed",
+   "completed_steps": 2000,
+   "seconds": 5.684501875000024,
+   "screen": {
+    "eligible": false,
+    "track_fraction": 0.48,
+    "volume_cv": 0.4640968759611647,
+    "mean_volume": 40.875,
+    "reason": "track fraction 0.48 < 0.9; volume CV 0.464 > 0.25"
+   },
+   "order": 1
+  },
+  {
+   "name": "sphere_t1_s0",
+   "kind": "sphere",
+   "tension": 1.0,
+   "seed": 0,
+   "noise_std": 0.0,
+   "boundary": "wrap",
+   "config_hash": "35d39c4d3ee764d3",
+   "checkpoint": "checkpoints/sphere_t1_s0.npz",
+   "resumed_from": null,
+   "status": "completed",
+   "completed_steps": 2000,
+   "seconds": 5.983449672000006,
+   "screen": {
+    "eligible": false,
+    "track_fraction": 0.04,
+    "volume_cv": 0.8214285714285714,
+    "mean_volume": 112.0,
+    "reason": "track fraction 0.04 < 0.9; volume CV 0.821 > 0.25"
+   },
+   "order": 2
+  },
+  {
+   "name": "sphere_t5_s0",
+   "kind": "sphere",
+   "tension": 5.0,
+   "seed": 0,
+   "noise_std": 0.0,
+   "boundary": "wrap",
+   "config_hash": "211816d4aad72482",
+   "checkpoint": "checkpoints/sphere_t5_s0.npz",
+   "resumed_from": null,
+   "status": "completed",
+   "completed_steps": 2000,
+   "seconds": 6.68411897499999,
+   "screen": {
+    "eligible": false,
+    "track_fraction": 0.12,
+    "volume_cv": 0.688343143803209,
+    "mean_volume": 139.5,
+    "reason": "track fraction 0.12 < 0.9; volume CV 0.688 > 0.25"
+   },
+   "order": 3
+  },
+  {
+   "name": "torus_t1_s0",
+   "kind": "torus",
+   "tension": 1.0,
+   "seed": 0,
+   "noise_std": 0.0,
+   "boundary": "wrap",
+   "config_hash": "35d39c4d3ee764d3",
+   "checkpoint": "checkpoints/torus_t1_s0.npz",
+   "resumed_from": null,
+   "status": "completed",
+   "completed_steps": 2000,
+   "seconds": 5.622683896000012,
+   "screen": {
+    "eligible": false,
+    "track_fraction": 0.0,
+    "reason": "never tracked"
+   },
+   "order": 4
+  },
+  {
+   "name": "torus_t5_s0",
+   "kind": "torus",
+   "tension": 5.0,
+   "seed": 0,
+   "noise_std": 0.0,
+   "boundary": "wrap",
+   "config_hash": "211816d4aad72482",
+   "checkpoint": "checkpoints/torus_t5_s0.npz",
+   "resumed_from": null,
+   "status": "completed",
+   "completed_steps": 2000,
+   "seconds": 6.318723241000043,
+   "screen": {
+    "eligible": false,
+    "track_fraction": 0.08,
+    "volume_cv": 0.6314973692230555,
+    "mean_volume": 68.0,
+    "reason": "track fraction 0.08 < 0.9; volume CV 0.631 > 0.25"
+   },
+   "order": 5
+  }
+ ],
+ "machine": {
+  "python": "3.13.18",
+  "numpy": "2.5.3",
+  "scipy": "1.18.1",
+  "platform": "Linux-6.18.44-fc-v185-x86_64-with-glibc2.39",
+  "cpus": 2
+ },
+ "cumulative_seconds": 38.800436863000016,
+ "pilot": {
+  "steps": 200,
+  "n": 24,
+  "seconds": 0.23177709699996285,
+  "sec_per_voxel_step": 8.383141529223194e-08,
+  "estimated_atlas_seconds": 39.556624554660324
+ },
+ "status": "completed",
+ "counts": {
+  "completed": 6
+ }
+}
